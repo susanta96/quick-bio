@@ -9,17 +9,21 @@ import Footer from "@/components/Footer";
 import Header from "@/components/Header";
 import LoadingDots from "@/components/LoadingDots";
 import ResizablePanel from "@/components/ResizablePanel";
-import GithubButton from "@/components/GithubButton";
+import ChooseSocialMedia from "@/components/ChooseSocialMedia";
+import { useRecoilValue } from "recoil";
+import { SocialMediaState } from "@/utils/Atoms";
 
 const Home: NextPage = () => {
+  const selectedSocialMedia = useRecoilValue(SocialMediaState);
   const [loading, setLoading] = useState(false);
   const [bio, setBio] = useState("");
   const [vibe, setVibe] = useState<VibeType>("Professional");
   const [generatedBios, setGeneratedBios] = useState<String>("");
+  const generatedBioCount = '1,193';
 
-  console.log("Streamed response: ", generatedBios);
+  // console.log("Streamed response: ", generatedBios);
 
-  const prompt =
+  const promptForTwitter =
     vibe === "Funny"
       ? `Generate 2 funny twitter bios with no hashtags and clearly labeled "1." and "2.". Make sure there is a joke in there and it's a little ridiculous. Make sure each generated bio is at max 20 words and base it on this context: ${bio}${
           bio.slice(-1) === "." ? "" : "."
@@ -28,10 +32,41 @@ const Home: NextPage = () => {
           bio.slice(-1) === "." ? "" : "."
         }`;
 
+  const promptForInstagram =
+        vibe === "Funny"
+          ? `Generate 2 funny instagram bios with hashtags or emojis and clearly labeled "1." and "2.". Make sure there is a joke in there and it's a little ridiculous. Make sure each generated bio is at max 150 characters and base it on this context: ${bio}${
+              bio.slice(-1) === "." ? "" : "."
+            }`
+          : `Generate 2 ${vibe} instagram bios with no hashtags but can include emoji and clearly labeled "1." and "2.". Make sure each generated bio is at least 14 words and at max 20 words and base them on this context: ${bio}${
+              bio.slice(-1) === "." ? "" : "."
+          }`;
+  const promptForFB =
+          vibe === "Funny"
+            ? `Generate 2 funny facebook bios with hashtags or emojis and clearly labeled "1." and "2.". Make sure there is a joke in there and it's a little ridiculous. Make sure each generated bio is at max 101 characters and base it on this context: ${bio}${
+                bio.slice(-1) === "." ? "" : "."
+              }`
+            : `Generate 2 ${vibe} facebook bios with no hashtags but can include emoji and clearly labeled "1." and "2.". Make sure each generated bio is at max 101 characters and base them on this context: ${bio}${
+                bio.slice(-1) === "." ? "" : "."
+            }`;
+          
+  const choosePrompt = () => {
+    switch(selectedSocialMedia) {
+      case 'facebook': 
+        return promptForFB;
+      case 'instagram': 
+        return promptForInstagram;
+      case 'twitter': 
+        return promptForTwitter;
+      default: 
+        return promptForTwitter;
+    }
+  }
   const generateBio = async (e: any) => {
     e.preventDefault();
     setGeneratedBios("");
     setLoading(true);
+    const prompt = choosePrompt();
+    console.log(prompt);
     const response = await fetch("/api/generate", {
       method: "POST",
       headers: {
@@ -68,19 +103,19 @@ const Home: NextPage = () => {
   };
 
   return (
-    <div className="flex max-w-6xl mx-auto flex-col items-center justify-center py-2 min-h-screen">
+    <div className="flex max-w-6xl mx-auto flex-col items-center justify-center min-h-screen">
       <Head>
-        <title>Twitter Generator</title>
-        <link rel="icon" href="/favicon.ico" />
+        <title>Quick Bio Generator</title>
+        <link rel="icon" href="/quickBio-logo.png" /> 
       </Head>
 
       <Header />
-      <main className="flex flex-1 w-full flex-col items-center justify-start text-center px-4 mt-12 sm:mt-20">
-        <GithubButton />
-        <h1 className="sm:text-6xl text-4xl max-w-2xl font-bold text-slate-900">
+      <main className="flex flex-1 w-full flex-col items-center justify-start text-center px-4 mt-12">
+        <ChooseSocialMedia />
+        <h1 className="sm:text-6xl text-4xl max-w-2xl font-bold text-slate-900 mt-16">
           Generate your next Twitter bio in seconds
         </h1>
-        <p className="text-slate-500 mt-5">18,167 bios generated so far.</p>
+        <p className="text-slate-500 mt-5">{generatedBioCount} bios generated so far.</p>
         <div className="max-w-xl w-full">
           <div className="flex mt-10 items-center space-x-3">
             <Image
@@ -133,9 +168,9 @@ const Home: NextPage = () => {
           )}
         </div>
         <Toaster
-          position="top-center"
+          position="bottom-center"
           reverseOrder={false}
-          toastOptions={{ duration: 2000 }}
+          toastOptions={{ duration: 3000 }}
         />
         <hr className="h-px bg-gray-700 border-1 dark:bg-gray-700" />
         <ResizablePanel>
