@@ -139,7 +139,7 @@ const Home: NextPage = () => {
             rows={4}
             className="w-full rounded-md border-gray-300 shadow-sm focus:border-black focus:ring-black my-5"
             placeholder={
-              "e.g. Senior Developer Advocate @vercel. Tweeting about web development, AI, and React / Next.js. Writing nutlope.substack.com."
+              "e.g. Senior Consultant @Merck. Passionate about web development, React / Next.js."
             }
           />
           <div className="flex mb-5 items-center space-x-3">
@@ -152,8 +152,9 @@ const Home: NextPage = () => {
 
           {!loading && (
             <button
-              className="bg-black rounded-xl text-white font-medium px-4 py-2 sm:mt-10 mt-8 hover:bg-black/80 w-full"
+              className="bg-black rounded-xl text-white font-medium px-4 py-2 sm:mt-10 mt-8 hover:bg-black/80 w-full disabled:bg-gray-500 disabled:cursor-not-allowed"
               onClick={(e) => generateBio(e)}
+              disabled={bio.trim().length === 0}
             >
               Generate your bio &rarr;
             </button>
