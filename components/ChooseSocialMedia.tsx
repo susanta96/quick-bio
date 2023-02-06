@@ -1,7 +1,7 @@
 import { SocialMediaState } from "@/utils/Atoms";
 import FB from "./icons/FacebookIcon";
 import Twitter from "./icons/TwiierIcon";
-import Insta from "./icons/instaIcon";
+import Insta from "./icons/InstaIcon";
 import { useRecoilState } from 'recoil'
 
 export type SocialMediaType = 'twitter' | 'facebook' | 'instagram';

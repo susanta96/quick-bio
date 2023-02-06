@@ -79,6 +79,9 @@ const Home: NextPage = () => {
     console.log("Edge function returned.");
 
     if (!response.ok) {
+      toast("Internal Issue, It will be back soon.", {
+        icon: "😔",
+      });
       throw new Error(response.statusText);
     }
 
