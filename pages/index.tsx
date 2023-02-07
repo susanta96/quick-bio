@@ -12,6 +12,7 @@ import ResizablePanel from "@/components/ResizablePanel";
 import ChooseSocialMedia from "@/components/ChooseSocialMedia";
 import { useRecoilValue } from "recoil";
 import { SocialMediaState } from "@/utils/Atoms";
+import Validator from "@/utils/utils";
 
 const Home: NextPage = () => {
   const selectedSocialMedia = useRecoilValue(SocialMediaState);
@@ -115,8 +116,8 @@ const Home: NextPage = () => {
       <Header />
       <main className="flex flex-1 w-full flex-col items-center justify-start text-center px-4 mt-12">
         <ChooseSocialMedia />
-        <h1 className="sm:text-6xl text-4xl max-w-2xl font-bold text-slate-900 mt-16">
-          Generate your next Twitter bio in seconds
+        <h1 className="sm:text-5xl text-4xl max-w-xl font-bold text-slate-900 mt-16">
+          Generate your next {Validator.toCapitalize(selectedSocialMedia)} bio in seconds
         </h1>
         <p className="text-slate-500 mt-5">{generatedBioCount} bios generated so far.</p>
         <div className="max-w-xl w-full">
