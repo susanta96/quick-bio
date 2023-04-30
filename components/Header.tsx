@@ -1,8 +1,11 @@
 import Image from "next/image";
 import Link from "next/link";
 import GithubButton from "./GithubButton";
+import { useRouter } from "next/router";
 
 export default function Header() {
+  const route = useRouter();
+  console.log(route);
   return (
     <header className="flex justify-between items-center w-full border-b-2 py-7 sm:px-4 px-2">
       <Link href="/" className="flex space-x-3 items-end">
@@ -17,7 +20,12 @@ export default function Header() {
           Quick Bio
         </h1>
       </Link>
-      <GithubButton />
+      <div className="flex space-x-5 items-center">
+        <Link href="/quote">
+          <h5 className={route.route === '/quote' ? 'text-bold' : ''}>Quotes / Status</h5>
+        </Link>
+        <GithubButton />  
+      </div>
     </header>
   );
 }
