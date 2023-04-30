@@ -28,9 +28,12 @@ const handler = async (req: Request): Promise<Response> => {
     stream: true,
     n: 1,
   };
-
-  const stream = await OpenAIStream(payload);
-  return new Response(stream);
+  try {
+    const stream = await OpenAIStream(payload);
+    return new Response(stream);
+  } catch (error: any) {
+    return new Response(error.message, { status: 500 });
+  }
 };
 
 export default handler;
